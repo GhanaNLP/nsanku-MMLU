@@ -19,7 +19,7 @@ import re
 import sys
 from pathlib import Path
 
-RAW_PATH = Path(__file__).parent.parent / "raw" / "all_questions.json"
+RAW_PATH = Path(__file__).parent / "raw" / "all_questions.json"
 OUT_DIR = Path(__file__).parent / "data"
 CHOICE_LABELS = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
