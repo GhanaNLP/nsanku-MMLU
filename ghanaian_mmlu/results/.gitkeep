@@ -1,0 +1,11 @@
+# This directory holds benchmark results submitted via pull requests.
+#
+# Each model's results live in results/<model_slug>/:
+#   - results.json       — aggregated scores (overall + per-language)
+#   - predictions.jsonl  — per-question predictions
+#
+# To add your model's results, run the benchmark and submit a PR:
+#   python evaluate.py --model <your-model>
+#   git add results/
+#   git commit -m "Add <model> results"
+#   git push && gh pr create
