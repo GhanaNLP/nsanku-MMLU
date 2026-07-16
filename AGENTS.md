@@ -6,7 +6,6 @@ run the Ghanaian MMLU benchmark on this repo.
 ## Quick Start
 
 ```bash
-cd ghanaian_mmlu
 python evaluate.py --dry-run          # verify pipeline works (no model needed)
 python evaluate.py --model <MODEL>    # run actual evaluation
 ```
@@ -14,7 +13,7 @@ python evaluate.py --model <MODEL>    # run actual evaluation
 ## Project Structure
 
 ```
-ghanaian_mmlu/
+nsanku-MMLU/
 ├── data/
 │   ├── ghanaian_mmlu.jsonl           # full dataset (2,194 questions)
 │   └── ghanaian_mmlu_<lang>.jsonl    # per-language splits
