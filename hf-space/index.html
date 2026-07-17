@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghanaian MMLU Leaderboard</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0b0f1a; --surface: #131826; --surface-2: #1a2134; --border: #252d44;
+  --text: #e2e8f0; --text-muted: #94a3b8; --accent: #4f46e5; --accent-hover: #6366f1;
+  --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+  --table-stripe: rgba(255,255,255,0.02); --radius: 12px;
+}
+html { font-size: 14px; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.5; min-height: 100vh; }
+a { color: var(--accent-hover); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
+.header { text-align: center; margin-bottom: 28px; }
+.header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }
+.header p { color: var(--text-muted); font-size: 0.95rem; }
+.header .links { margin-top: 10px; }
+.repo-link { display: inline-flex; align-items: center; gap: 4px; font-size: 0.85rem; }
+.repo-link svg { width: 16px; height: 16px; }
+.tabs { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; }
+.tab { padding: 10px 20px; border-radius: 8px 8px 0 0; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text-muted);
+  font-weight: 500; font-size: 0.95rem; transition: all 0.15s; border-bottom: none; }
+.tab:hover { color: var(--text); }
+.tab.active { background: var(--surface-2); color: var(--text); border-bottom: 2px solid var(--accent); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px; margin-bottom: 24px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px; }
+.stat-card .label { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 6px; }
+.stat-card .value { font-size: 1.4rem; font-weight: 700; }
+.table-wrap { background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+th, td { text-align: left; padding: 10px 16px; white-space: nowrap; }
+th { background: var(--surface-2); color: var(--text-muted); font-weight: 600; font-size: 0.8rem;
+  text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; }
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:nth-child(even) { background: var(--table-stripe); }
+tbody tr:hover { background: rgba(79, 70, 229, 0.1); }
+.empty-row { text-align: center; color: var(--text-muted); }
+.mtype { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 0.75rem;
+  background: var(--surface-2); color: var(--text-muted); }
+.rank-medal { font-size: 1rem; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.loading { text-align: center; padding: 80px 0; color: var(--text-muted); }
+.loading .spinner { width: 40px; height: 40px; border: 3px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.footer { margin-top: 40px; text-align: center; color: var(--text-muted); font-size: 0.8rem;
+  padding-top: 20px; border-top: 1px solid var(--border); }
+.note { color: var(--text-muted); margin-bottom: 14px; font-size: 0.9rem; }
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.4rem; }
+  th, td { padding: 8px 10px; font-size: 0.82rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🇬🇭 Ghanaian MMLU Leaderboard</h1>
+    <p>Benchmarking LLMs on <strong>2,194</strong> multiple-choice questions across
+       <strong>12 Ghanaian languages</strong> from the
+       <a href="https://ntc.gov.gh/practice_test/ghanaian_languages/" target="_blank">NTC licensing practice tests</a>.
+       All models evaluated with <strong>thinking disabled</strong> for fair comparison.</p>
+    <div class="links">
+      <a href="https://github.com/GhanaNLP/nsanku-MMLU" target="_blank" class="repo-link">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GhanaNLP/nsanku-MMLU
+      </a>
+    </div>
+  </div>
+
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading benchmark data from GitHub…</p>
+  </div>
+
+  <div id="main" style="display:none;">
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="overall">🏆 Overall</div>
+      <div class="tab" data-tab="per-lang">🌐 Per-Language</div>
+    </div>
+
+    <div class="tab-pane active" id="pane-overall">
+      <p class="note">Overall accuracy across all 2,194 questions — higher is better.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Model</th><th>Accuracy (%)</th><th>Correct</th><th>Total</th><th>Unparsed</th></tr></thead>
+          <tbody id="overall-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="pane-per-lang">
+      <p class="note">Per-language accuracy (%) — models sorted by overall accuracy.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr id="per-lang-head"></tr></thead>
+          <tbody id="per-lang-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Higher accuracy is better · Chance baseline ≈ 25% (4 options)</p>
+      <p>Add a model by opening a PR to <a href="https://github.com/GhanaNLP/nsanku-MMLU" target="_blank">the GitHub repo</a> — see CONTRIBUTING.md. Then reload this page.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const REPO = 'GhanaNLP/nsanku-MMLU';
+const BRANCH = 'master';
+const RAW = `https://raw.githubusercontent.com/${REPO}/${BRANCH}`;
+const API = `https://api.github.com/repos/${REPO}/contents`;
+
+const DISPLAY_NAMES = {
+  'openai/gpt-4o': 'GPT-4o',
+  'gemini/gemini-3-flash-preview': 'Gemini 3 Flash',
+  'gemini/gemini-3.1-pro-preview': 'Gemini 3.1 Pro',
+  'nvidia/deepseek-ai/deepseek-v4-flash': 'DeepSeek v4 Flash',
+  'nvidia/minimaxai/minimax-m3': 'MiniMax M3',
+  'nvidia/z-ai/glm-5.2': 'GLM-5.2',
+  'nvidia/nvidia/nemotron-3-ultra-550b-a55b': 'Nemotron 3 Ultra 550B',
+  'nvidia/abacusai/dracarys-llama-3.1-70b-instruct': 'Dracarys Llama 3.1 70B',
+  'mistral/mistral-large-latest': 'Mistral Large',
+};
+const LANG_ORDER = ['akuapem_twi','asante_twi','dagaare','dagbani','dangme','ewe','fanti','ga','gonja','gurene','kasem','nzema'];
+const LANG_DISPLAY = {akuapem_twi:'Akuapem Twi',asante_twi:'Asante Twi',dagaare:'Dagaare',dagbani:'Dagbani',
+  dangme:'Dangme',ewe:'Ewe',fanti:'Fante',ga:'Ga',gonja:'Gonja',gurene:'Gurene',kasem:'Kasem',nzema:'Nzema'};
+
+function displayName(spec){ return DISPLAY_NAMES[spec] || (spec||'unknown').split('/').pop(); }
+function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function accColor(a){ return a >= 50 ? 'var(--success)' : a >= 35 ? 'var(--accent-hover)' : 'var(--warning)'; }
+const MEDALS = ['🥇','🥈','🥉'];
+
+async function getJSON(url){ const r = await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status+' for '+url); return r.json(); }
+
+async function loadResults(){
+  const entries = await getJSON(`${API}/results?ref=${BRANCH}`);
+  const dirs = entries.filter(e => e.type === 'dir');
+  const out = [];
+  for (const d of dirs){
+    try {
+      const data = await getJSON(`${RAW}/results/${d.name}/results.json`);
+      if (data && data.overall) out.push(data);
+    } catch(e){ /* dir without results.json (incomplete/dry-run) — skip */ }
+  }
+  return out;
+}
+
+function renderStats(results){
+  const n = results.length;
+  const best = results.reduce((a,b)=> b.overall.accuracy > (a?a.overall.accuracy:-1) ? b : a, null);
+  const stats = [
+    {label:'Models', value:n},
+    {label:'Questions', value:'2,194'},
+    {label:'Languages', value:'12'},
+    {label:'Best model', value: best ? `${displayName(best.model)} · ${best.overall.accuracy.toFixed(2)}%` : '—'},
+  ];
+  document.getElementById('stats-grid').innerHTML = stats.map(s =>
+    `<div class="stat-card"><div class="label">${s.label}</div><div class="value">${s.value}</div></div>`).join('');
+}
+
+function renderOverall(results){
+  const rows = [...results].sort((a,b)=> b.overall.accuracy - a.overall.accuracy);
+  const body = document.getElementById('overall-body');
+  if(!rows.length){ body.innerHTML = '<tr class="empty-row"><td colspan="6">No results found</td></tr>'; return; }
+  body.innerHTML = rows.map((r,i)=>{
+    const o = r.overall;
+    return `<tr>
+      <td>${MEDALS[i] ? `<span class="rank-medal">${MEDALS[i]}</span>` : (i+1)}</td>
+      <td>${escapeHtml(displayName(r.model))}</td>
+      <td style="font-weight:700;color:${accColor(o.accuracy)}">${o.accuracy.toFixed(2)}</td>
+      <td>${o.correct}</td>
+      <td>${o.total}</td>
+      <td>${o.unparsed||0}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderPerLang(results){
+  const rows = [...results].sort((a,b)=> b.overall.accuracy - a.overall.accuracy);
+  document.getElementById('per-lang-head').innerHTML =
+    '<th>Model</th>' + LANG_ORDER.map(l=>`<th>${LANG_DISPLAY[l]}</th>`).join('');
+  const body = document.getElementById('per-lang-body');
+  if(!rows.length){ body.innerHTML = '<tr class="empty-row"><td colspan="13">No results found</td></tr>'; return; }
+  body.innerHTML = rows.map(r=>{
+    const cells = LANG_ORDER.map(l=>{
+      const s = (r.per_language||{})[l];
+      if(s && s.total>0) return `<td style="color:${accColor(s.accuracy)}">${s.accuracy.toFixed(1)}</td>`;
+      return '<td>—</td>';
+    }).join('');
+    return `<tr><td>${escapeHtml(displayName(r.model))}</td>${cells}</tr>`;
+  }).join('');
+}
+
+function setupTabs(){
+  document.querySelectorAll('.tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('pane-'+tab.dataset.tab).classList.add('active');
+    });
+  });
+}
+
+async function main(){
+  try {
+    const results = await loadResults();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    renderStats(results);
+    renderOverall(results);
+    renderPerLang(results);
+    setupTabs();
+  } catch(e){
+    document.getElementById('loading').innerHTML =
+      `<div style="color:var(--danger)"><p>Failed to load benchmark data.</p>
+       <p style="font-size:0.85rem;margin-top:8px">${escapeHtml(e.message)}</p>
+       <p style="margin-top:12px;font-size:0.85rem">Visit the <a href="https://github.com/GhanaNLP/nsanku-MMLU" target="_blank">GitHub repo</a> directly.</p></div>`;
+  }
+}
+main();
+</script>
+</body>
+</html>

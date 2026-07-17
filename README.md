@@ -3,7 +3,7 @@
 A multiple-choice benchmark for evaluating LLMs on Ghanaian language exams from the
 National Teaching Council (NTC) licensing practice tests.
 
-**Leaderboard:** [Hugging Face Spaces](https://huggingface.co/spaces/GhanaNLP/nsanku-MMLU)
+**Leaderboard:** [Hugging Face Spaces](https://huggingface.co/spaces/ghananlpcommunity/nsanku-mmlu-leaderboard)
 
 ## Dataset
 
@@ -113,7 +113,7 @@ nsanku-MMLU/
 │   ├── transformers_backend.py      # HuggingFace local
 │   ├── vllm_backend.py              # vLLM local
 │   └── api_backends.py              # OpenAI, Claude, Gemini
-├── hf-space/                        # Gradio leaderboard for HF Spaces
+├── hf-space/                        # static HTML leaderboard (reads results/ from GitHub)
 ├── raw/                             # raw extracted questions from NTC
 ├── evaluate.py                      # main evaluation script
 ├── leaderboard.py                   # compare results across models
