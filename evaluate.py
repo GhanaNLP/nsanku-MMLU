@@ -45,7 +45,8 @@ from typing import Optional
 
 PROMPT_TEMPLATE = """\
 Answer the following multiple-choice question in {language_name}.
-Reply with ONLY a single number (1-{n_options}) — nothing else.
+Start your reply with a single number (1-{n_options}) — the number must come first.
+If you add any explanation, keep it to no more than 3 sentences.
 
 Example:
 Question: Mɛnfa nea ɛyɛ akɛse paa no ka ho?
@@ -253,7 +254,7 @@ def evaluate(
             acc_so_far = n_correct / done * 100
             sys.stdout.write(
                 f"\r  [{done}/{total}] accuracy={acc_so_far:.1f}%  "
-                f"q={entry['question_id']}  pred={predicted}  gold={correct_letter}  "
+                f"q={entry['question_id']}  pred={predicted}  gold={correct_answer}  "
                 f"{'OK' if is_correct else 'WRONG'}   "
             )
             sys.stdout.flush()

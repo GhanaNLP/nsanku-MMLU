@@ -24,7 +24,8 @@ def create_backend(
     Prefix convention:
         openai/    -> OpenAI API (e.g. openai/gpt-4o)
         anthropic/ -> Anthropic API (e.g. anthropic/claude-sonnet-4-20250514)
-        gemini/    -> Google Gemini (e.g. gemini/gemini-2.0-flash)
+        gemini/    -> Google Gemini (e.g. gemini/gemini-2.5-flash)
+        nvidia/    -> NVIDIA Build API (e.g. nvidia/deepseek-ai/deepseek-v4-flash)
         vllm/      -> vLLM local (e.g. vllm/meta-llama/Llama-3-8B)
         (none)     -> transformers local (e.g. meta-llama/Llama-3-8B)
     """
@@ -51,6 +52,24 @@ def create_backend(
 
         return GeminiBackend(
             model_name=model_spec[len("gemini/"):],
+            api_key=api_key,
+            max_tokens=max_new_tokens,
+            temperature=temperature,
+        )
+    elif model_spec.startswith("nvidia/"):
+        from .api_backends import NVIDIABuildBackend
+
+        return NVIDIABuildBackend(
+            model_name=model_spec[len("nvidia/"):],
+            api_key=api_key,
+            max_tokens=max_new_tokens,
+            temperature=temperature,
+        )
+    elif model_spec.startswith("mistral/"):
+        from .api_backends import MistralBackend
+
+        return MistralBackend(
+            model_name=model_spec[len("mistral/"):],
             api_key=api_key,
             max_tokens=max_new_tokens,
             temperature=temperature,

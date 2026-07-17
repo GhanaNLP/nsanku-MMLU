@@ -118,8 +118,21 @@ nsanku-MMLU/
 ├── evaluate.py                      # main evaluation script
 ├── leaderboard.py                   # compare results across models
 ├── prepare_dataset.py               # raw → MMLU JSONL
+├── CONTRIBUTING.md                  # how to submit new benchmark results
 └── requirements.txt
 ```
+
+## Contributing
+
+The most valuable contributions are **new benchmark results** — running the
+evaluation on models not yet on the leaderboard (new hosted-API models, or your
+own custom / fine-tuned models for the supported languages).
+
+To keep every number comparable, please run the **unmodified** code with the
+standardized configuration (thinking disabled for all models,
+`--max-new-tokens 2048`, `temperature 0.0`).
+
+See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full guide.
 
 ## License
 
